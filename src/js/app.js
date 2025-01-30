@@ -33,17 +33,63 @@ function render(variables = {}) {
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
-          <h1>Lucy Boilett</h1>
-          <h2>Web Developer</h2>
-          <h3>Miami, USA</h3>
-          <ul class="position-right">
-            <li><a href="https://twitter.com/4geeksacademy"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://github.com/4geeksacademy"><i class="fab fa-github"></i></a></li>
-            <li><a href="https://linkedin.com/school/4geeksacademy"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="https://instagram.com/4geeksacademy"><i class="fab fa-instagram"></i></a></li>
+          <h1>${variables.name || "Name"} ${variables.lastName ||
+    "Surname"}</h1>
+          <h2>${variables.role || "Role"}</h2>
+          <h3>${variables.city || "City"}, ${variables.country ||
+    "Country"}</h3>
+          <ul class="${
+            variables.socialMediaPosition === "position-left"
+              ? "position-left"
+              : "position-right"
+          }">
+            <li><a href="${
+              variables.twitter === null
+                ? "https://twitter.com/4geeksacademy"
+                : handleSocialMediaValidation(variables.twitter, "twitter")
+            }"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="${
+              variables.github === null
+                ? "https://github.com/4geeksacademy"
+                : handleSocialMediaValidation(variables.github, "github")
+            }"><i class="fab fa-github"></i></a></li>
+            <li><a href="${
+              variables.linkedin === null
+                ? "https://linkedin.com/4geeksacademy"
+                : handleSocialMediaValidation(variables.linkedin, "linkedin")
+            }"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="${
+              variables.instagram === null
+                ? "https://instagram.com/4geeksacademy"
+                : handleSocialMediaValidation(variables.instagram, "instagram")
+            }"><i class="fab fa-instagram"></i></a></li>
           </ul>
         </div>
     `;
+}
+
+function hasSpecialChars(str) {
+  const specialChars = "@#$%^&*()+[]{}|;:,<>?/`~";
+  return str.split("").some(char => specialChars.includes(char));
+}
+
+function handleSocialMediaValidation(socialMedia, type) {
+  if (hasSpecialChars(socialMedia)) {
+    alert("Solo necesitamos el nombre de usuario");
+    return (socialMedia = null);
+    // Sería perfecto limpiar el input
+  }
+
+  switch (type) {
+    case "twitter":
+      return "http://twitter.com/" + socialMedia;
+    case "github":
+      return "http://github.com/" + socialMedia;
+    case "linkedin":
+      return "http://linkedin.com/" + socialMedia;
+    case "instagram":
+      return "http://instagram.com/" + socialMedia;
+  }
 }
 
 /**
